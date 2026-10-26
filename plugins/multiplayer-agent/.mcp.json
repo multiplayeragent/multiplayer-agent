@@ -2,7 +2,10 @@
   "mcpServers": {
     "multiplayer-agent": {
       "type": "http",
-      "url": "https://api.multiplayeragent.com/mcp"
+      "url": "https://api.multiplayeragent.com/mcp",
+      "headers": {
+        "X-MPA-Source": "plugin"
+      }
     }
   }
 }
