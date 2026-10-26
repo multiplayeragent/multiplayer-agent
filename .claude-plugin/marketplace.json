@@ -1,0 +1,12 @@
+{
+  "name": "multiplayer-agent",
+  "description": "Make any browser game multiplayer from Claude Code, and host it at a share link",
+  "owner": { "name": "Multiplayer Agent", "url": "https://multiplayeragent.com" },
+  "plugins": [
+    {
+      "name": "multiplayer-agent",
+      "source": "./plugins/multiplayer-agent",
+      "description": "Hosted multiplayer backend (MCP server) plus a make-it-multiplayer skill: rooms, shared state, player identity, leaderboards, and a share link for the game"
+    }
+  ]
+}

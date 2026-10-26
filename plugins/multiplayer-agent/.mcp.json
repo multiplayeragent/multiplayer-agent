@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "multiplayer-agent": {
+      "type": "http",
+      "url": "https://api.multiplayeragent.com/mcp"
+    }
+  }
+}
