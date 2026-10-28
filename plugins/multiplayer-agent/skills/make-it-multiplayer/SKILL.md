@@ -10,7 +10,12 @@ You have a hosted multiplayer backend through the `multiplayer-agent` MCP server
 
 ## 0. Check the tools are there
 
-The tools are named `mcp__plugin_multiplayer-agent_multiplayer-agent__<tool>` (for example `..._create_game`). If you can't see them, the plugin was installed in this session and hasn't loaded yet: ask the user to type `/reload-plugins` (or open `/mcp` and reconnect `multiplayer-agent`), then continue. Nothing else is needed: no key, no account.
+The tools are named `mcp__plugin_multiplayer-agent_multiplayer-agent__<tool>` (for example `..._create_game`). If you can't see them, the plugin was installed during this chat, and its tools only load when a new chat starts (`/reload-plugins` and `/mcp` don't bring them in). Stop there and reply with just this, adapted to where they are:
+
+- In an editor (VS Code, Cursor, JetBrains): "Start a new Claude chat and say: make my game multiplayer."
+- In a terminal: "Type `/exit`, then run `claude --continue` to pick this chat back up with the tools loaded."
+
+Don't plan the game, read the website or research pricing and limits while the tools are missing: the tools' replies and `get_sdk_reference` carry everything you need. Nothing else is needed either: no key, no account.
 
 ## 1. Connect the user's account early, in one question
 
@@ -37,7 +42,7 @@ Decide, per piece of game state, who owns it:
 - **Per-player** (position, name, color, score, input): each client writes only its OWN entity with `me.set(...)`. A client cannot write another player's entity.
 - **Room-wide** (round timer, level, whose turn, pickups): `setShared(...)`, written by one agreed client (the host), not by everyone.
 - **One-off happenings** (shot fired, hit, chat line): events with `mp.send` / `mp.on`, so they are never lost between state updates.
-- **Must not be cheatable** (scores that matter, currency, hidden cards): authoritative server logic (`deploy_room_logic`) once the account is connected. The server computes; clients only send input.
+- **Must not be cheatable** (scores that matter, currency, hidden cards): authoritative server logic (`deploy_room_logic`). The server computes; clients only send input. It needs the account connected in step 1, which is one more reason to ask for the email up front. Don't turn it into a separate question: if they haven't connected when you get there, build the rest, then say the cheat-proof part goes live once they press Connect on that page.
 
 Keep room state lean: it is sent to everyone many times a second. Writes past the documented limits are dropped silently, so pack big grids into fewer fields (one string per row, not per cell).
 
