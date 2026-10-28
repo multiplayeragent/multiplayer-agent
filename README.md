@@ -6,14 +6,10 @@ No account or key is needed to start. Claude asks for your email and opens a pag
 
 ## Install
 
-```
-/plugin install multiplayer-agent --marketplace natepac/multiplayer-agent
-```
-
-or
+Type these in Claude Code:
 
 ```
-/plugin marketplace add natepac/multiplayer-agent
+/plugin marketplace add multiplayeragent/multiplayer-agent
 /plugin install multiplayer-agent@multiplayer-agent
 ```
 

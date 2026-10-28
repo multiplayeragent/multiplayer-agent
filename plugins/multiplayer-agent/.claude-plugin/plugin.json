@@ -1,13 +1,13 @@
 {
   "name": "multiplayer-agent",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Make any browser game multiplayer and host it at a share link: rooms, shared state, player identity and leaderboards from a hosted backend. No account needed to start.",
   "author": {
     "name": "Multiplayer Agent",
     "url": "https://multiplayeragent.com"
   },
   "homepage": "https://multiplayeragent.com/mcp",
-  "repository": "https://github.com/natepac/multiplayer-agent",
+  "repository": "https://github.com/multiplayeragent/multiplayer-agent",
   "license": "MIT",
   "keywords": [
     "multiplayer",
