@@ -42,7 +42,7 @@ Decide, per piece of game state, who owns it:
 - **Per-player** (position, name, color, score, input): each client writes only its OWN entity with `me.set(...)`. A client cannot write another player's entity.
 - **Room-wide** (round timer, level, whose turn, pickups): `setShared(...)`, written by one agreed client (the host), not by everyone.
 - **One-off happenings** (shot fired, hit, chat line): events with `mp.send` / `mp.on`, so they are never lost between state updates.
-- **Must not be cheatable** (scores that matter, currency, hidden cards): authoritative server logic (`deploy_room_logic`). The server computes; clients only send input. It needs the account connected in step 1, which is one more reason to ask for the email up front. Don't turn it into a separate question: if they haven't connected when you get there, build the rest, then say the cheat-proof part goes live once they press Connect on that page.
+- **Must not be cheatable** (scores that matter, currency, hidden cards): authoritative server logic (`deploy_room_logic`). The server computes; clients only send input. It needs the account connected in step 1, which is one more reason to ask for the email up front. Don't turn it into a separate question: if they haven't connected when you get there, build the rest, then say the cheat-proof part goes live once they press Connect on that page. Until then `deploy_room_logic` answers "Connect an account first"; once they've connected it works in this same chat, with no reload.
 
 Keep room state lean: it is sent to everyone many times a second. Writes past the documented limits are dropped silently, so pack big grids into fewer fields (one string per row, not per cell).
 
@@ -63,7 +63,11 @@ Open the game in TWO DIFFERENT browsers, or one normal and one private window. T
 
 ## 6. Host it and hand over the link
 
-Call `publish_game` with every file the game needs: `index.html` at the root plus any JS, CSS and assets (text as plain content, images and audio as base64 with `encoding: "base64"`). The files must use this game's publishable key. It returns the share link, `https://<slug>.play.multiplayeragent.com/`, the game's own address. Re-run it after each change; the link stays the same.
+Call `publish_game` with every file the game needs: `index.html` at the root plus any JS, CSS and assets. The files must use this game's publishable key. It returns the share link, `https://<slug>.play.multiplayeragent.com/`, the game's own address. Re-run it after each change; the link stays the same.
+
+- Small text files (HTML, JS, CSS) go inline as `{ path, content }`.
+- Images, audio, fonts, models and any file over ~50 KB go through `create_upload` first, never as base64 in the call (a tool call can't carry megabytes). Give it each file's hosted `path` and exact `size` in bytes. It returns one URL per file: PUT each straight from disk with `curl -sS -T "<file>" "<url>"` (Windows PowerShell: `curl.exe`), right away, since each URL takes one upload and expires in 15 minutes. Then pass `{ path, uploadId }` for those files to `publish_game`.
+- To change a few files later, publish with `mode: "patch"`: it adds or replaces only what you send and keeps the rest (`remove` deletes paths). The default mode replaces the whole game.
 
 Finish by giving the user the share link ("send this to a friend and play together"), plus the claim link if they didn't connect an account.
 
