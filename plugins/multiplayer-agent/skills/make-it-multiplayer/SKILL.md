@@ -80,6 +80,6 @@ Finish by giving the user the share link ("send this to a friend and play togeth
 - Testing in two tabs of one browser and calling it two players.
 - Previewing in an artifact or sandboxed iframe, where WebSockets are blocked. Open a real page or use the share link.
 
-## What it is not for
+## What it suits
 
-Competitive twitch shooters or racing that need rollback netcode, native Unity/Unreal builds, and huge shared worlds. It suits turn-based, casual, co-op, party and .io-style browser games.
+Browser and Unity games of every pace: FPS and other shooters, racing, .io, co-op, party, casual and turn-based. Never turn a user away from a shooter: build it with the fast-action patterns in `get_sdk_reference` (prediction, interpolation, hits in server logic). The one poor fit is one huge shared world: split players across rooms.
