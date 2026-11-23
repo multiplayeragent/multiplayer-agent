@@ -13,7 +13,7 @@ Type these in Claude Code:
 /plugin install multiplayer-agent@multiplayer-agent
 ```
 
-If the tools don't show up straight away, type `/reload-plugins`. Then ask Claude something like "build me a multiplayer snake game" or "make this game multiplayer".
+Then start a **new chat** (in the terminal: `/exit`, then `claude --continue`): a plugin's tools load when a session starts, so they won't appear in the chat you installed from. In the new chat, ask Claude something like "build me a multiplayer snake game" or "make this game multiplayer".
 
 ## What it includes
 
