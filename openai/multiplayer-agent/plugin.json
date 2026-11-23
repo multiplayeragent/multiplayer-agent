@@ -1,0 +1,91 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "multiplayer-agent",
+  "version": "1.0.0",
+  "description": "Make a browser game multiplayer and host it at a share link: rooms, shared real-time state, player identity, saved progress and leaderboards from a hosted backend. No account or key needed to start.",
+  "author": { "name": "Multiplayer Agent", "url": "https://multiplayeragent.com" },
+  "homepage": "https://multiplayeragent.com/mcp",
+  "repository": "https://github.com/multiplayeragent/multiplayer-agent",
+  "license": "MIT",
+  "keywords": ["multiplayer", "game", "realtime", "browser-game", "game-backend", "leaderboard", "hosting"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Multiplayer Agent",
+        "shortDescription": "Make your game multiplayer",
+        "longDescription": "Multiplayer Agent turns a browser game into an online multiplayer game, or builds a new one, without a game server to write or run.\n\nWhat it does:\n- Creates a game and its rooms on a hosted backend. Rooms are created the first time a player joins.\n- Writes the client code against the real SDK: each player's state syncs to everyone in the room, plus room-wide state and one-off events.\n- Adds player identity, saved progress and leaderboards.\n- Deploys server-side game rules so scores and outcomes can't be faked by a player's browser (once the user connects an account).\n- Publishes the game to its own share link, so a friend can open it and play.\n\nWho it is for: anyone building a browser game with an AI assistant who wants friends to play together online: casual, co-op, party, .io, turn-based, racing and action games.\n\nHow accounts work: no account or key is needed to start. The first tool call opens a temporary studio that lasts 72 hours. To keep the games, the user gives an email and confirms on the website; passwords are never typed in the chat.\n\nLimitations: a game can't run inside the chat preview, so the result is always a share link to open in a browser. All room state is visible to every player in the room unless it is kept in server rules. One huge shared world should be split across rooms.",
+        "developerName": "Multiplayer Agent",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Create multiplayer games and rooms",
+          "Sync player state in real time",
+          "Add saved progress and leaderboards",
+          "Deploy cheat-proof server rules",
+          "Host the game at a share link"
+        ],
+        "websiteURL": "https://multiplayeragent.com",
+        "supportURL": "https://multiplayeragent.com/about",
+        "privacyPolicyURL": "https://multiplayeragent.com/privacy",
+        "termsOfServiceURL": "https://multiplayeragent.com/terms",
+        "defaultPrompt": [
+          "Build me a multiplayer snake game I can share with a friend",
+          "Make my browser game multiplayer",
+          "Add an online leaderboard to my game"
+        ],
+        "brandColor": "#469AE1",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Build a new multiplayer game from scratch and host it",
+              "prompt": "Build me a simple multiplayer snake game that I can share with a friend.",
+              "tools_triggered": "create_game, get_sdk_reference, publish_game",
+              "expected_behavior": "Creates a game, writes a single-file HTML client wired to that game's key, publishes it and returns a https://<slug>.play.multiplayeragent.com/ share link that two browsers can open and play together."
+            },
+            {
+              "description": "Make an existing single-player game multiplayer",
+              "prompt": "Here is my single-player pong game in one HTML file. Make it two-player online and give me a link.\n\n<!doctype html><canvas id=c width=400 height=300></canvas><script>const x=c.getContext('2d');let p=120,b={x:200,y:150,dx:3,dy:2};onmousemove=e=>p=e.offsetY-30;(function f(){b.x+=b.dx;b.y+=b.dy;if(b.y<0||b.y>300)b.dy*=-1;if(b.x<10&&b.y>p&&b.y<p+60||b.x>390)b.dx*=-1;x.clearRect(0,0,400,300);x.fillRect(0,p,8,60);x.fillRect(b.x,b.y,6,6);requestAnimationFrame(f)})()</script>",
+              "tools_triggered": "create_game, get_sdk_reference, publish_game",
+              "expected_behavior": "Keeps the existing game logic, adds a second remote paddle synced through the room, publishes the result and returns a share link."
+            },
+            {
+              "description": "Add a leaderboard",
+              "prompt": "Build a multiplayer clicker game with an online leaderboard and give me the link.",
+              "tools_triggered": "create_game, get_sdk_reference, publish_game",
+              "expected_behavior": "Builds the game with a leaderboard using the SDK reference, publishes it and returns a share link; the leaderboard shows scores from different players."
+            },
+            {
+              "description": "Browse starter games",
+              "prompt": "What multiplayer starter games can I begin from?",
+              "tools_triggered": "list_starters",
+              "expected_behavior": "Lists available starter games by genre with short descriptions and offers to start from one."
+            },
+            {
+              "description": "Save games to the user's own account without a password in chat",
+              "prompt": "I want to keep the games we made. Save them to my account, my email is reviewer@multiplayeragent.com",
+              "tools_triggered": "connect_account",
+              "expected_behavior": "Returns a one-time link and a short code, tells the user to open the link, sign in on the website and press Connect after checking the code. Never asks for a password."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Unrelated coding task. The plugin should not act: nothing about games or multiplayer is involved.",
+              "prompt": "Write a Python script that sorts a CSV file by its second column."
+            },
+            {
+              "description": "General game recommendation, not a build request. The plugin should not act; answer normally without creating anything.",
+              "prompt": "What are some good single-player puzzle games on Steam?"
+            },
+            {
+              "description": "User offers a password in chat. The plugin must not use it or call any tool with it; it should explain that passwords are only typed on the website and offer the connect link instead.",
+              "prompt": "Log me into my Multiplayer Agent account, my password is hunter2"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
